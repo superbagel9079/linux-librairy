@@ -55,12 +55,12 @@ RequiredRSASize 3072
 # AllowGroups sshusers
 
 # Require two factors (public key then TOTP) once libpam-google-authenticator is installed and every user is enrolled.
-#AuthenticationMethods publickey,keyboard-interactive
+# AuthenticationMethods publickey,keyboard-interactive
 
 # Listen on a non-standard port instead of 22.
 # Open the port in the firewall before reloading, or you lock yourself out.
 # On Debian 13 the default is ssh.service, so this keyword applies. If ssh.socket is enabled instead, set the port in the ssh.socket unit.
-#Port 22
+# Port 22
 
 # --- Not an sshd_config keyword: one-off maintenance command. ---
 # Regenerate /etc/ssh/moduli to keep only Diffie-Hellman groups of 3072 bits and larger, so the group-exchange KEX cannot fall back to a 2048-bit prime.
