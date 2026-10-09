@@ -1,0 +1,22 @@
+// Local overrides for unattended-upgrades.
+// The package files 20auto-upgrades (enable) and 50unattended-upgrades
+// (defaults) are left untouched. APT reads this directory in order and the
+// last value wins, so the values below override the package defaults.
+
+// Reboot automatically so kernel and glibc updates take effect.
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+Unattended-Upgrade::Automatic-Reboot-Time "03:00";
+
+// Clean up obsolete kernel packages and dangling dependencies.
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
+// Keep the update log in the journal too.
+Unattended-Upgrade::SyslogEnable "true";
+Unattended-Upgrade::SyslogFacility "daemon";
+
+// Mail on every run. Needs a local MTA (none by default on Debian).
+//Unattended-Upgrade::Mail "root";
+//Unattended-Upgrade::MailReport "on-change";
