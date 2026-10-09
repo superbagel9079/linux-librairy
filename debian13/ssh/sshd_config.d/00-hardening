@@ -66,7 +66,7 @@ RequiredRSASize 3072
 # Regenerate /etc/ssh/moduli to keep only Diffie-Hellman groups of 3072 bits and larger, so the group-exchange KEX cannot fall back to a 2048-bit prime.
 # The size column stores bits minus one, so a 3072-bit prime reads 3071.
 # Debian 13 ships 432 entries, 60 of them below that and 372 at or above.
-# cp --archive /etc/ssh/moduli /etc/ssh/moduli.bak
+# cp --archive /etc/ssh/moduli /etc/ssh/moduli.bak.$(date +%Y%m%d%H%M%S)
 # awk '$5 >= 3071' /etc/ssh/moduli > /tmp/moduli.new
 # wc -l /tmp/moduli.new    # must not be 0
 # mv /tmp/moduli.new /etc/ssh/moduli
