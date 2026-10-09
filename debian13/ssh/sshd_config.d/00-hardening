@@ -56,3 +56,28 @@ RequiredRSASize 3072
 
 # Require two factors (public key then TOTP) once libpam-google-authenticator is installed and every user is enrolled.
 #AuthenticationMethods publickey,keyboard-interactive
+
+# Listen on a non-standard port instead of 22.
+# Open the port in the firewall before reloading, or you lock yourself out.
+# On Debian 13 the default is ssh.service, so this keyword applies. If ssh.socket is enabled instead, set the port in the ssh.socket unit.
+#Port 22
+
+# --- Not an sshd_config keyword: one-off maintenance command. ---
+# Regenerate /etc/ssh/moduli to keep only Diffie-Hellman groups of 3072 bits and larger, so the group-exchange KEX cannot fall back to a 2048-bit prime.
+# The size column stores bits minus one, so a 3072-bit prime reads 3071.
+# Debian 13 ships 432 entries, 60 of them below that and 372 at or above.
+# cp --archive /etc/ssh/moduli /etc/ssh/moduli.bak
+# awk '$5 >= 3071' /etc/ssh/moduli > /tmp/moduli.new
+# wc -l /tmp/moduli.new    # must not be 0
+# mv /tmp/moduli.new /etc/ssh/moduli
+# Run "systemctl restart ssh" after replacing the file.
+
+# --- Left at the OpenSSH defaults on purpose. ---
+# Ciphers, MACs and KexAlgorithms: the 10.0p2 defaults are stronger than the 2019 Mozilla "modern" lists still copied around in guides. Only override them with a concrete reason, for example to drop one legacy algorithm.
+# HostKeyAlgorithms ssh-ed25519
+# KexAlgorithms curve25519-sha256
+# Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+# MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+# One keyword that disables X11, agent, TCP and StreamLocal forwarding at once, OpenSSH 7.4 and later.
+# DisableForwarding yes
