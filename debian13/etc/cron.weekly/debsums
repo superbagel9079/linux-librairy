@@ -1,8 +1,27 @@
 #!/bin/sh
 
-# Report package files whose checksums no longer match the installed package.
-# Output goes to the journal; read it with: journalctl -t debsums
-#
-# Config files you edited on purpose will show up as changed, that is expected.
-# Install the tool once: sudo apt install debsums
-# debsums -c 2>&1 | logger -t debsums
+debsums="/usr/bin/debsums"
+ignorefile="/etc/debsums-ignore"
+
+[ -x $debsums ] || exit 0
+
+if ! [ -e "$ignorefile" ]; then
+    ignorefile="/dev/null"
+fi
+
+# source our config
+. /etc/default/debsums
+[ "z$CRON_CHECK" = "zweekly" ] || exit 0
+
+# See ionice(1)
+if [ -x /usr/bin/ionice ] &&
+    /usr/bin/ionice -c3 true 2>/dev/null; then
+    IONICE="/usr/bin/ionice -c3"
+fi
+
+exec 3>&1
+
+$IONICE $debsums -cs 2>&1 | egrep -vf "$ignorefile" | tee /proc/self/fd/3 | sed 's/^debsums: //' | logger -t debsums
+
+# Exit with a normal status code even if errors (which could be ignored) were found
+exit 0
