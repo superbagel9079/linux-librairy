@@ -1,11 +1,3 @@
----
-date: 2026-10-10
-status: draft
-subject: Debian 13 AppArmor enforcement on the gateway VM
-tags: [debian, hardening]
-link: ""
----
-
 # Debian 13 AppArmor enforcement
 
 AppArmor confines programs to the files, capabilities and namespaces their
@@ -64,7 +56,3 @@ one program, `sudo aa-complain /etc/apparmor.d/<profile>`.
 
 - [apparmor.d(5) - Debian trixie](https://manpages.debian.org/trixie/apparmor/apparmor.d.5.en.html): profile flags, including complain and unconfined.
 - Evidence: `sudo aa-status` and the profile files under `/etc/apparmor.d` on the gateway VM, 2026-10-10.
-
-## Related
-
-- [[debian-root-account-hardening]]: the other access-control note for the same VM.
