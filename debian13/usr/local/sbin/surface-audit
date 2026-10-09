@@ -1,8 +1,12 @@
 #!/bin/sh
 
-# Read-only surface inventory for a hardened Debian host.
-# Run as root: sudo surface-audit
+#
+# Read-only surface inventory for a Debian 13 host.
 # Nothing is modified; read the output and decide what to disable or remove.
+# Install: sudo install -m 755 surface-audit /usr/local/sbin/surface-audit
+# Apply:   none, run it on demand.
+# Check:   sudo surface-audit
+#
 
 echo "== listening sockets =="
 ss -tulpn
