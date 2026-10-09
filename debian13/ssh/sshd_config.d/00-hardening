@@ -1,0 +1,58 @@
+#
+# Local hardening for the SSH server.
+# Drop-in: /etc/ssh/sshd_config stays the untouched package default.
+# Check:   sshd -t -f /etc/ssh/sshd_config
+#
+# sshd uses the first value obtained for a keyword and this directory is included at the top of /etc/ssh/sshd_config, so the settings below win over anything later in that file (for example the Debian "X11Forwarding yes").
+#
+
+# Don't allow logins as root over SSH.
+PermitRootLogin no
+
+# Public key authentication only: no passwords, no keyboard-interactive.
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitEmptyPasswords no
+
+# Log the fingerprint of the key that was accepted.
+LogLevel VERBOSE
+
+# Shorten the login window and limit the authentication attempts.
+LoginGraceTime 30
+MaxAuthTries 3
+MaxSessions 4
+MaxStartups 10:30:60
+
+# Drop idle sessions. This runs inside the encrypted channel.
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Disable X11, agent, TCP, socket and tunnel forwarding.
+X11Forwarding no
+AllowAgentForwarding no
+AllowTcpForwarding no
+AllowStreamLocalForwarding no
+GatewayPorts no
+PermitTunnel no
+PermitUserEnvironment no
+
+# Ignore .rhosts/.shosts and host-based authentication.
+IgnoreRhosts yes
+HostbasedAuthentication no
+
+# Don't reverse-resolve the client address.
+UseDNS no
+
+# Enforce a minimum RSA key size of 3072 bits.
+# OpenSSH 9.1 and later only. Debian 13 ships 10.0p2, so this is safe here.
+RequiredRSASize 3072
+
+# Restrict SSH logins to members of one group.
+# WARNING: create the group and add your account before reloading, or you lock yourself out. Test from a second session before closing the first.
+# groupadd sshusers
+# usermod -aG sshusers <youruser>
+# AllowGroups sshusers
+
+# Require two factors (public key then TOTP) once libpam-google-authenticator is installed and every user is enrolled.
+#AuthenticationMethods publickey,keyboard-interactive
