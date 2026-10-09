@@ -45,4 +45,4 @@
 -a always,exit -F arch=b32 -S mount -k mounts
 
 # Make the rules immutable until reboot. Uncomment once verified.
-# -e 2
+#-e 2
