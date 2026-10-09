@@ -1,0 +1,27 @@
+#
+# SPDX-License-Identifier: LGPL-2.1-or-later
+#
+# This file is part of systemd.
+#
+# Copy of /lib/systemd/system/tmp.mount with noexec added.
+# A file in /etc/systemd/system shadows the vendor unit, so the package file
+# stays untouched.
+# Apply:  sudo systemctl daemon-reload && sudo systemctl restart tmp.mount
+# Check:  findmnt /tmp
+
+[Unit]
+Description=Temporary Directory /tmp
+Documentation=https://systemd.io/TEMPORARY_DIRECTORIES
+Documentation=man:file-hierarchy(7)
+Documentation=https://systemd.io/API_FILE_SYSTEMS
+ConditionPathIsSymbolicLink=!/tmp
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+After=swap.target
+
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,strictatime,nosuid,nodev,noexec,size=50%%,nr_inodes=1m
