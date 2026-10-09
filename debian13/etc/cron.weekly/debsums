@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Report package files whose checksums no longer match the installed package.
+# Output goes to the journal; read it with: journalctl -t debsums
+#
+# Config files you edited on purpose will show up as changed, that is expected.
+# Install the tool once: sudo apt install debsums
+# debsums -c 2>&1 | logger -t debsums
