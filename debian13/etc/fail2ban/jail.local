@@ -1,0 +1,19 @@
+#
+# SSH brute force protection for Debian 13.
+# Drop-in: /etc/fail2ban/jail.conf and /etc/fail2ban/jail.d/defaults-debian.conf stay the untouched package defaults; values here win over both.
+# The Debian package already enables [sshd], sets banaction = nftables and backend = systemd, so only the timings and the port are set here.
+# Install: sudo apt install fail2ban
+# sudo install -D -m 644 jail.local /etc/fail2ban/jail.local
+# Apply:   sudo systemctl enable --now fail2ban
+# Check:   sudo fail2ban-client status sshd
+# sudo fail2ban-client banned
+#
+
+[DEFAULT]
+bantime  = 1h
+findtime = 10m
+maxretry = 5
+
+[sshd]
+# Change 22 if you moved the SSH port; the ban rule matches this port.
+port = 22
