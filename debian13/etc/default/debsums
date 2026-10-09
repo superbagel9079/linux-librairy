@@ -1,6 +1,10 @@
-# Defaults for debsums cron jobs
-# sourced by /etc/cron.d/debsums
-
+#
+# Weekly checksum verification for Debian 13.
+# Drop-in: the debsums package scripts stay untouched; only CRON_CHECK is set here.
+# Install: sudo apt install debsums
+# Apply:   none, the cron script reads this file on each run.
+# Check:   grep CRON_CHECK /etc/default/debsums
+#          journalctl -t debsums
 #
 # This is a POSIX shell fragment
 #
