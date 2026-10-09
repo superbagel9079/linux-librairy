@@ -1,11 +1,3 @@
----
-date: 2026-10-10
-status: draft
-subject: Debian 13 root account hardening on the gateway VM
-tags: [debian, hardening]
-link: ""
----
-
 # Debian 13 root account hardening
 
 Root is taken out of every password-based login path, local and remote, on the
@@ -68,7 +60,3 @@ sudo passwd root       # or set a new password
 - [passwd(1) - Debian trixie](https://manpages.debian.org/trixie/passwd/passwd.1.en.html): the `-l` option adds a `!` at the beginning of the password and does not disable the account for other tokens such as an SSH key.
 - [sshd_config(5) - Debian trixie](https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html): `PermitRootLogin no` refuses login as root over SSH.
 - Evidence: `sudo passwd -S root` and `sudo sshd -T` on the gateway VM, 2026-10-10.
-
-## Related
-
-- [[debian-apparmor-hardening]]: the other access-control note for the same VM.
