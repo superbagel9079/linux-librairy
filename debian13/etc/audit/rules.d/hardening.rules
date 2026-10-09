@@ -1,0 +1,48 @@
+#
+# Audit rules for Debian 13.
+# Drop-in: /etc/audit/rules.d is merged by augenrules into /etc/audit/audit.rules, so that generated file stays generated.
+# augenrules and auditctl live in /usr/sbin, absent from a normal user PATH, so call them with sudo.
+# Install: sudo apt install auditd
+# sudo install -D -m 640 hardening.rules /etc/audit/rules.d/hardening.rules
+# Apply:   sudo augenrules --check && sudo augenrules --load
+# sudo systemctl restart auditd
+# Check:   sudo auditctl -l
+# sudo ausearch -k identity
+#
+
+# Identity and authentication
+-w /etc/passwd -p wa -k identity
+-w /etc/group -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+-w /etc/nsswitch.conf -p wa -k identity
+-w /etc/pam.d/ -p wa -k pam
+
+# Privilege escalation
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers.d/ -p wa -k sudoers
+-w /etc/sudo.conf -p wa -k sudoers
+
+# SSH and firewall
+-w /etc/ssh/sshd_config -p wa -k sshd
+-w /etc/ssh/sshd_config.d/ -p wa -k sshd
+-w /etc/nftables.conf -p wa -k firewall
+
+# Updates and systemd
+-w /etc/apt/ -p wa -k updates
+-w /etc/systemd/ -p wa -k systemd
+-w /etc/localtime -p wa -k time
+
+# Kernel modules and time changes
+-a always,exit -F arch=b64 -S init_module,finit_module,delete_module -k modules
+-a always,exit -F arch=b32 -S init_module,finit_module,delete_module -k modules
+-a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,clock_settime -k time
+
+# Mounts
+-a always,exit -F arch=b64 -S mount -k mounts
+-a always,exit -F arch=b32 -S mount -k mounts
+
+# Make the rules immutable until reboot. Uncomment once verified.
+# -e 2
