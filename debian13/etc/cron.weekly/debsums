@@ -1,5 +1,13 @@
 #!/bin/sh
 
+#
+# Weekly package checksum verification, from the debsums package.
+# Runs only when CRON_CHECK=weekly in /etc/default/debsums.
+# Install: sudo install -m 755 debsums /etc/cron.weekly/debsums
+# Apply:   none, cron runs the script weekly.
+# Check:   journalctl -t debsums
+#
+
 debsums="/usr/bin/debsums"
 ignorefile="/etc/debsums-ignore"
 
