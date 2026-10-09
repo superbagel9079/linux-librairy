@@ -1,0 +1,40 @@
+#
+# Local hardening policies for sudo.
+# Drop-in: /etc/sudoers stays the untouched package default.
+# Edit:    visudo -f /etc/sudoers.d/00-hardening
+# Check:   visudo -c
+#
+
+# Ask for the password again after 5 minutes instead of 15.
+Defaults        timestamp_timeout=5
+
+# Log to a dedicated file in addition to syslog, with the year, the hostname and the exit status of the command.
+Defaults        logfile="/var/log/sudo.log"
+Defaults        log_year
+Defaults        log_host
+Defaults        log_exit_status
+
+# Log the input and output of the session; replay with sudoreplay.
+# Bound maxseq to limit disk usage and skip sudoreplay and reboot.
+Defaults        log_input, log_output
+Defaults        iolog_dir="/var/log/sudo-io"
+Defaults        iolog_file="%{seq}"
+Defaults        maxseq=1000
+Defaults!/usr/bin/sudoreplay !log_output
+Defaults!/usr/local/bin/sudoreplay !log_output
+Cmnd_Alias      REBOOT = /usr/sbin/reboot, /usr/sbin/poweroff, /usr/sbin/shutdown, /usr/sbin/halt
+Defaults!REBOOT !log_output
+
+# Log commands spawned by a shell running under sudo. May break programs that use ptrace(2).
+#Defaults       log_subcmds
+
+# Intercept and log sub-commands (sudo 1.9.8+). Stricter, may break commands.
+#Defaults       intercept
+
+# Refuse to prompt for a password if it would be visible on the screen.
+Defaults        !visiblepw
+
+# Send mail on authentication failure. Requires an MTA.
+#Defaults       mailto="root@localhost"
+#Defaults       mail_badpass
+#Defaults       mail_always
