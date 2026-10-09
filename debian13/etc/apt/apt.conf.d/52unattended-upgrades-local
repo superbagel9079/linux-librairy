@@ -1,11 +1,13 @@
-// Local overrides for unattended-upgrades.
-// The package files 20auto-upgrades (enable) and 50unattended-upgrades
-// (defaults) are left untouched. APT reads this directory in order and the
-// last value wins, so the values below override the package defaults.
+//
+// Automatic security updates for Debian 13.
+// Drop-in: 20auto-upgrades (enable) and 50unattended-upgrades (defaults) stay
+// untouched; APT reads this directory in order and the last value wins.
 // The file name must not contain a dot, or APT ignores it.
-// Apply:  nothing to do, APT reads this file on every run.
-// Check:  sudo apt-config dump | grep -i unattended
-//         sudo unattended-upgrade --dry-run --debug
+// Install: sudo install -m 644 52unattended-upgrades-local /etc/apt/apt.conf.d/52unattended-upgrades-local
+// Apply:   none, APT reads this file on every run.
+// Check:   sudo apt-config dump | grep -i unattended
+//          sudo unattended-upgrade --dry-run --debug
+//
 
 // Reboot automatically so kernel and glibc updates take effect.
 Unattended-Upgrade::Automatic-Reboot "true";
