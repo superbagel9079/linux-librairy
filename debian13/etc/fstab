@@ -1,1 +1,13 @@
+#
+# Hardening mount options for Debian 13.
+# Drop-in: append the /dev/shm line below to /etc/fstab; the installer lines for
+# / and /boot/efi stay untouched and are specific to each machine.
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# Install: append the line below to /etc/fstab
+# Apply:   sudo systemctl daemon-reload && sudo mount -o remount /dev/shm
+# Check:   sudo findmnt --verify
+#          findmnt /dev/shm
+#
+
+# Mount the shared memory filesystem without exec, for hardening.
 tmpfs /dev/shm tmpfs rw,nosuid,nodev,noexec 0 0
