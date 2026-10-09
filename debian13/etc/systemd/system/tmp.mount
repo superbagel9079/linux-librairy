@@ -1,13 +1,14 @@
-#
 # SPDX-License-Identifier: LGPL-2.1-or-later
 #
 # This file is part of systemd.
 #
-# Copy of /lib/systemd/system/tmp.mount with noexec added.
-# A file in /etc/systemd/system shadows the vendor unit, so the package file
-# stays untouched.
-# Apply:  sudo systemctl daemon-reload && sudo systemctl restart tmp.mount
-# Check:  findmnt /tmp
+# Hardening for the /tmp mount.
+# Drop-in: a file in /etc/systemd/system shadows /lib/systemd/system/tmp.mount,
+# so the vendor unit stays untouched.
+# Install: sudo install -m 644 tmp.mount /etc/systemd/system/tmp.mount
+# Apply:   sudo systemctl daemon-reload && sudo systemctl restart tmp.mount
+# Check:   findmnt /tmp
+#
 
 [Unit]
 Description=Temporary Directory /tmp
