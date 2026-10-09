@@ -3,36 +3,36 @@
 # Drop-in: /etc/audit/rules.d is merged by augenrules into /etc/audit/audit.rules, so that generated file stays generated.
 # augenrules and auditctl live in /usr/sbin, absent from a normal user PATH, so call them with sudo.
 # Install: sudo apt install auditd
-# sudo install -D -m 640 hardening.rules /etc/audit/rules.d/hardening.rules
+#          sudo install -D -m 640 hardening.rules /etc/audit/rules.d/hardening.rules
 # Apply:   sudo augenrules --check && sudo augenrules --load
-# sudo systemctl restart auditd
+#          sudo systemctl restart auditd
 # Check:   sudo auditctl -l
-# sudo ausearch -k identity
+#          sudo ausearch -k identity
 #
 
 # Identity and authentication
--w /etc/passwd -p wa -k identity
--w /etc/group -p wa -k identity
--w /etc/shadow -p wa -k identity
--w /etc/gshadow -p wa -k identity
--w /etc/security/opasswd -p wa -k identity
--w /etc/nsswitch.conf -p wa -k identity
--w /etc/pam.d/ -p wa -k pam
+-a always,exit -F path=/etc/passwd -F perm=wa -F key=identity
+-a always,exit -F path=/etc/group -F perm=wa -F key=identity
+-a always,exit -F path=/etc/shadow -F perm=wa -F key=identity
+-a always,exit -F path=/etc/gshadow -F perm=wa -F key=identity
+-a always,exit -F path=/etc/security/opasswd -F perm=wa -F key=identity
+-a always,exit -F path=/etc/nsswitch.conf -F perm=wa -F key=identity
+-a always,exit -F path=/etc/pam.d -F perm=wa -F key=pam
 
 # Privilege escalation
--w /etc/sudoers -p wa -k sudoers
--w /etc/sudoers.d/ -p wa -k sudoers
--w /etc/sudo.conf -p wa -k sudoers
+-a always,exit -F path=/etc/sudoers -F perm=wa -F key=sudoers
+-a always,exit -F path=/etc/sudoers.d -F perm=wa -F key=sudoers
+-a always,exit -F path=/etc/sudo.conf -F perm=wa -F key=sudoers
 
 # SSH and firewall
--w /etc/ssh/sshd_config -p wa -k sshd
--w /etc/ssh/sshd_config.d/ -p wa -k sshd
--w /etc/nftables.conf -p wa -k firewall
+-a always,exit -F path=/etc/ssh/sshd_config -F perm=wa -F key=sshd
+-a always,exit -F path=/etc/ssh/sshd_config.d -F perm=wa -F key=sshd
+-a always,exit -F path=/etc/nftables.conf -F perm=wa -F key=firewall
 
 # Updates and systemd
--w /etc/apt/ -p wa -k updates
--w /etc/systemd/ -p wa -k systemd
--w /etc/localtime -p wa -k time
+-a always,exit -F path=/etc/apt -F perm=wa -F key=updates
+-a always,exit -F path=/etc/systemd -F perm=wa -F key=systemd
+-a always,exit -F path=/etc/localtime -F perm=wa -F key=time
 
 # Kernel modules and time changes
 -a always,exit -F arch=b64 -S init_module,finit_module,delete_module -k modules
